@@ -10,3 +10,56 @@ course presentation slides
 
 information of 
 https://github.com/barisCanCoskun/-Linux-Device-Driver-Programming-With-Beaglebone-Black-LDD1-.git
+
+
+
+
+
+all commands you should run on root directory : beaglbone black 
+
+sudo apt-get update
+sudo apt-get install build-essential lzop u-boot-tools net-tools bison flex libssl-dev libncurses5-dev libncursesw5-dev unzip chrpath xz-utils minicom wget git-core
+
+boot images and root file system
+https://www.beagleboard.org/boards/beaglebone-black
+
+this package we need download from the above link:
+https://www.beagleboard.org/distros/am335x-11-7-2023-09-02-4gb-microsd-iot
+
+
+cross compiler and toolchain :
+
+   https://www.linaro.org/downloads/
+     |-> check this name : Linaro's GNU and LLVM Toolchains:
+                          select part of  gnu gcc compiler download :
+                    |-> Linaro also provides monthly GNU Toolchain Integration Builds  here will get link 
+			https://snapshots.linaro.org/gnu-toolchain/?_gl=1*1juixms*_ga*MTQyNjIwNTI3MC4xNzQ5NDUzMjAz*_ga_E12E6FXFVK*czE3NDk2NTQxOTMkbzUkZzEkdDE3NDk2NTQzNjIkajYwJGwwJGgw			  			
+        |-> 14.0-2023.06-1
+            |->arm-linux-gnueabihf
+               |-> gcc-linaro-14.0.0-2023.06-x86_64_arm-linux-gnueabihf.tar.xz
+      
+
+
+
+
+gparted applicaation will use to partition the Micro SD card
+https://gparted.org/download.php
+
+
+menaka@menaka-IdeaPad-Slim-3-14IAH8:~$ vi .bashrc 
+
+
+copy the this Path to paste in .bashrc file
+
+export PATH=$PATH:/home/menaka/lld/downloads/gcc-linaro-7.1.1-2017.05-x86_64_arm-linux-gnueabihf/bin
+
+
+
+run the command on the terminal 
+menaka@menaka-IdeaPad-Slim-3-14IAH8:~$ source .bashrc
+menaka@menaka-IdeaPad-Slim-3-14IAH8:~$ arm     //press Tab you can see all bins files
+
+
+
+
+
