@@ -91,7 +91,16 @@ sync
 
 
 
+to open the minicom 
+sudo minicom -s
+setup the port number using alphebet 
+once done select the :
+save setup as dfl
+after that 
+exit
 
 
+To exit from the minicom:
+ CTRL+A followed by key X
 
 
