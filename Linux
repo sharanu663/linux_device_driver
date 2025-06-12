@@ -30,6 +30,8 @@ https://www.beagleboard.org/boards/beaglebone-black
 this package we need download from the above link:
 https://www.beagleboard.org/distros/am335x-11-7-2023-09-02-4gb-microsd-iot
 
+gcc cross compiler :
+sudo apt-get install gcc-arm-linux-gnueabihf
 
 cross compiler and toolchain :
 
