@@ -13,7 +13,7 @@ https://github.com/barisCanCoskun/-Linux-Device-Driver-Programming-With-Beaglebo
 
 
 we required 3 software for boot up beaglebone black 
-1) pre-build -images
+1) pre-build -images  contain (am335x-boneblack.dtb : Device tree binary of BBB, MLO: primary boot loader(memory loader), u-boot.img :u-bootloader image,uEnv.txt:u-boot commands and env setting, UImage: kernel image)g
 2) cross compiler 
 3) debian (image)
 4) Gpart use foe sd card partion
