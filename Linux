@@ -107,18 +107,14 @@ To exit from the minicom:
 
 
 
-/******************************************************************************
-Now update the kernel image ( before was kernel pre-build image we used)
-/**********************************************************************************/
-https://github.com/beagleboard/linux
 
 /******************************************************************************
-Now update the kernel image ( before was kernel pre-build image we used)
+Now compile the kernel source files ( before was kernel pre-build image we used)
 /**********************************************************************************/
 https://github.com/beagleboard/linux
   
  this version below link:  v5.10.168-ti-rt-r76
- copy this url : https://github.com/beagleboard/linux.git
+ copy this url : https://github.com/beagleboard/linux.git or downlaod the kernel source file 
 
 open new terminal :
 go to source directory under lld
