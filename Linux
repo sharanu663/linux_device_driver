@@ -110,6 +110,11 @@ Now update the kernel image ( before was kernel pre-build image we used)
 /**********************************************************************************/
 https://github.com/beagleboard/linux
 
+open the terminil :
+ go to source directory under lld :
+  git init
+  git clone https://github.com/beagleboard/linux.git
+
 
 
 
