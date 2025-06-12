@@ -159,3 +159,10 @@ sudo make ARCH=arm  modules_install
 
 
 
+menaka@menaka-IdeaPad-Slim-3-14IAH8:~$ cd /lib/modules
+menaka@menaka-IdeaPad-Slim-3-14IAH8:/lib/modules$ ls
+5.10.168  6.14.0-15-generic
+
+
+
+
