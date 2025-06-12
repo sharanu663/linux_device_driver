@@ -70,7 +70,23 @@ earse the sd card
    select option for BOOT : create as : primary partition, fils system :ext4 ,label: ROOTFS
 then apply 
 2) once done we have to select flags :
-     right click BOOT partition label : select manage flags here you select  boot and lba
+     right click BOOT partition label : select manage flags here you select  "boot" and "lba"
+close the app
+
+
+open terminal :
+copy from the pc to sd card 
+lsblk : list block devices and you can see the ur sd partition 
+cp -a * /media/kiran/BOOT/
+sync
+extract the debian image :
+unxz debian file name
+once extract is done got to that location and right click and select "open with Disk image mounter"
+check mounted or not for that again run the :
+lsblk   here you can see /media/kiran/roots
+copy from the pc to sd card :
+sudo cp -a * /media/kiran/ROOFS/
+sync
 
 
 
