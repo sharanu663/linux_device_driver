@@ -104,3 +104,12 @@ To exit from the minicom:
  CTRL+A followed by key X
 
 
+
+/******************************************************************************
+Now update the kernel image ( before was kernel pre-build image we used)
+/**********************************************************************************/
+
+
+
+
+
