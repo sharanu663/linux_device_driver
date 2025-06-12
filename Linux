@@ -46,17 +46,6 @@ gparted applicaation will use to partition the Micro SD card
 
 https://gparted.org/download.php
 
-open the gparted application:
-earse the sd card
-1) create new partition 
-    for BOOT and ROOTFS
-   select option for BOOT : create as : primary partition, new side : 512MB, fils system : fat16,label: BOOT
-   select option for BOOT : create as : primary partition, fils system :ext4 ,label: ROOTFS
-then apply 
-2) once done we have to select flags :
-     right click BOOT partition label 
-
-
 add the tool chain path to the home directory .bashrc file:
 
 run the command on the terminal :
@@ -72,6 +61,19 @@ echo export PATH=$PATH:/home/menaka/lld/downloads/gcc-linaro-7.1.1-2017.05-x86_6
 
 menaka@menaka-IdeaPad-Slim-3-14IAH8:~$ source .bashrc
 menaka@menaka-IdeaPad-Slim-3-14IAH8:~$ arm     //press Tab you can see all bins files
+
+open the gparted application:
+earse the sd card
+1) create new partition 
+    for BOOT and ROOTFS
+   select option for BOOT : create as : primary partition, new side : 512MB, fils system : fat16,label: BOOT
+   select option for BOOT : create as : primary partition, fils system :ext4 ,label: ROOTFS
+then apply 
+2) once done we have to select flags :
+     right click BOOT partition label : select manage flags here you select  boot and lba
+
+
+
 
 
 
