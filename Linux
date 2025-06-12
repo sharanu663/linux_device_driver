@@ -139,12 +139,12 @@ STEP 2:
 
 make ARCH=arm bb.org_defconfig
 
-
-STEP 3:
+|----------------------------------------------------------------------------------------------------------------
+ right now not use STEP 3:
 /*This step is optional. Run this command only if you want to change some kernel settings before compilation */ ​
 
 make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- menuconfig
-
+|--------------------------------------------------------------------------------------------------------------------
 
 STEP 4:
 /*Kernel source code compilation. This stage creates a kernel image "uImage" also all the device tree source files will be compiled, and dtbs will be generated */ ​
