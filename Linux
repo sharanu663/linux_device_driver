@@ -12,7 +12,11 @@ information of
 https://github.com/barisCanCoskun/-Linux-Device-Driver-Programming-With-Beaglebone-Black-LDD1-.git
 
 
-
+we required 3 software for boot up beaglebone black 
+1) pre-build -images
+2) cross compiler 
+3) debian (image)
+4) Gpart use foe sd card partion
 
 
 all commands you should run on root directory : beaglbone black 
@@ -34,28 +38,38 @@ cross compiler and toolchain :
                           select part of  gnu gcc compiler download :
                     |-> Linaro also provides monthly GNU Toolchain Integration Builds  here will get link 
 			https://snapshots.linaro.org/gnu-toolchain/?_gl=1*1juixms*_ga*MTQyNjIwNTI3MC4xNzQ5NDUzMjAz*_ga_E12E6FXFVK*czE3NDk2NTQxOTMkbzUkZzEkdDE3NDk2NTQzNjIkajYwJGwwJGgw			  			
-        |-> 14.0-2023.06-1
-            |->arm-linux-gnueabihf
-               |-> gcc-linaro-14.0.0-2023.06-x86_64_arm-linux-gnueabihf.tar.xz
-      
-
-
-
+                          |-> 14.0-2023.06-1
+                              |->arm-linux-gnueabihf
+                                   |-> gcc-linaro-14.0.0-2023.06-x86_64_arm-linux-gnueabihf.tar.xz
 
 gparted applicaation will use to partition the Micro SD card
+
 https://gparted.org/download.php
 
+open the gparted application:
+earse the sd card
+1) create new partition 
+    for BOOT and ROOTFS
+   select option for BOOT : create as : primary partition, new side : 512MB, fils system : fat16,label: BOOT
+   select option for BOOT : create as : primary partition, fils system :ext4 ,label: ROOTFS
+then apply 
+2) once done we have to select flags :
+     right click BOOT partition label 
+
+
+add the tool chain path to the home directory .bashrc file:
+
+run the command on the terminal :
 
 menaka@menaka-IdeaPad-Slim-3-14IAH8:~$ vi .bashrc 
 
-
-copy the this Path to paste in .bashrc file
+copy the this Path to paste in .bashrc file :
 
 export PATH=$PATH:/home/menaka/lld/downloads/gcc-linaro-7.1.1-2017.05-x86_64_arm-linux-gnueabihf/bin
+or
+echo export PATH=$PATH:/home/menaka/lld/downloads/gcc-linaro-7.1.1-2017.05-x86_64_arm-linux-gnueabihf/bin > ~/.bashrc
 
 
-
-run the command on the terminal 
 menaka@menaka-IdeaPad-Slim-3-14IAH8:~$ source .bashrc
 menaka@menaka-IdeaPad-Slim-3-14IAH8:~$ arm     //press Tab you can see all bins files
 
