@@ -110,10 +110,18 @@ Now update the kernel image ( before was kernel pre-build image we used)
 /**********************************************************************************/
 https://github.com/beagleboard/linux
 
-open the terminil :
- go to source directory under lld :
-  git init
-  git clone https://github.com/beagleboard/linux.git
+/******************************************************************************
+Now update the kernel image ( before was kernel pre-build image we used)
+/**********************************************************************************/
+https://github.com/beagleboard/linux
+  
+ this version below link:  v5.10.168-ti-rt-r76
+ copy this url : https://github.com/beagleboard/linux.git
+
+open new terminal :
+go to source directory under lld
+ git init
+ git clone https://github.com/beagleboard/linux.git linux_bb_5.10
 
 
 
