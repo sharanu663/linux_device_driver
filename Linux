@@ -197,6 +197,8 @@ after execution.
 
 In the make file :
 
+make -C $KDIR M=$PWD[Targets]
+
 obj-<X> :=mian.o
 
 X = n do not compile the module 
@@ -204,7 +206,11 @@ X =y compile the module and link with kernel image
 X=m, compile as dynamically loadable kernel module
 
 
+Taget : modules
+        module_install
+        clean
 
+        
 
 
 
