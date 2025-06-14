@@ -166,3 +166,55 @@ menaka@menaka-IdeaPad-Slim-3-14IAH8:/lib/modules$ ls
 
 
 
+
+
+
+/***************************notes **************************/
+
+linux kernel module : nothing but add device and removing device at linux run time.
+
+static dynamic linux kernel module:
+static kernel module : if you build module as part of final kernel image, this modules are can't unload.
+already it occupies the memory permanently during  run time.
+
+dynamic kernel : this modules are not part of kernel image, you can load and unload the module during 
+run time.
+ commnds : insmod, rmmod  
+
+static int __init funname(void)
+         return 0;
+static void __exit funcname(void)
+
+module_init(funname);
+module_exit(funcname);
+
+In case of your module dynamic, this function will get called during module insertion 
+In case of you module static, this function will get called during boot time. 
+
+
+__init macro is a technique,when used with a function,the kernel will free the code memory of the function
+after execution.
+
+In the make file :
+
+obj-<X> :=mian.o
+
+X = n do not compile the module 
+X =y compile the module and link with kernel image
+X=m, compile as dynamically loadable kernel module
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
