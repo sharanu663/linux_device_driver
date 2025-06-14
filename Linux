@@ -251,11 +251,11 @@ In tree building  :adding our module inside the kernel soruce tree and build ker
         open vim makefile under char directroy 
         and add the "obj-y +=my_c_dev/               //directroy name we created now
 
+see the menuconfig your helloworld 
+make ARCH=arm menuconfig
+    here got to device driver -> character device driver-> fastbit custom module ->helloworld module support 
 
-
-
-
-
+build cmd: make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- modules -j4
 
 
 
