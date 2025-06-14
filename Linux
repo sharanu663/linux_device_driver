@@ -258,6 +258,10 @@ make ARCH=arm menuconfig
 build cmd: make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- modules -j4
 
 
+printk message will store into the kernel ring buffer is called kernel log
+dmesg | tail -5  //it show latest 5 kernel messages
+dmesg | head -20  //it show first 20 kernel messages
+
 
 
 
