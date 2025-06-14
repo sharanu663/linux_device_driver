@@ -212,6 +212,45 @@ Taget : modules
 
         
 
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -C /path of taget kernel source file M=$coustm driver file path  modules
+
+ex:
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -C /home/menka/lld/source file M=$pwd modules
+
+if get any error try below one 
+cat  /home/menaka/.bashrc
+copy the cross compiler tool chain path.
+
+and open sudo vi /etc/sudoers
+go to "secur_path"  got to end :paste here
+
+
+
+In tree building  :adding our module inside the kernel soruce tree and build kernel along our module 
+
+1. go to target linux directory inside "/drivers/char"  here create a folder /my_c_dev
+  write ur example code main.c.
+2. same directroy create kconfig file and add the below entries
+  menu "my custom modules"
+    config CUSTOM_HELLOWORLD
+          tristate "hello_world_module_support"
+           default n
+  endmenu
+
+3. go to /char kconfig file add the local kconfig entry to upper level kconfig
+    cd ..
+    vi kconfig and add the just created the kconfig file here
+   source "driver/char/my_c_dev/kconfig"
+    
+4. create a local Makefile in the new directroy that is my_c_dev
+     vim Makefile
+5. add obj-$(config_item)+=<module>.o in to local Makefile
+           obj-$(config name)
+    ex:  obj-$(CUSTOM_HELLOWORLD) += main.o
+6. add the local level makefile to higher level makefile (driver/char  directroy)
+        open vim makefile under char directroy 
+        and add the "obj-y +=my_c_dev/               //directroy name we created now
+
 
 
 
