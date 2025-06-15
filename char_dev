@@ -58,8 +58,13 @@ and tracks  interaction on an opened file by the user process, each file has is 
 which the filesystem uses to identify the file. each inode object associated with an inode number,
 which uniquely identifies the file the filesystem.
 inode object is created and stored in memory as and when a new file (regular or device) gets created.
+"if any changes in the inode member elements then that will writtern back to disk"
 
-struct file: 
+
+struct file: whenever a file opened a file object is created in kernel space. there will one file 
+object for every open of a regular or device file.
+stored information abt the interaction b/w an open file and a process
+"content not written back to disks unlike inode"
 
 
 
