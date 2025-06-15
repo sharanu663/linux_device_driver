@@ -49,12 +49,12 @@ const char *fmt : string for the device's name
 
 Deletion:
 
-unregister_chrdev_region()
+device_destory(struct class *class,dev_t devt);
+class_destroy(struct class *cls);
+cdev_del(strcut cdev *p);
+unregister_chrdev_region(dev_t from,unsigned count);
 
-cdev_del();
 
-class_destroy();
-device_destory();
 
 
 whenever user space request some opertion then it will for to VFS(virtual file system)
@@ -176,7 +176,12 @@ device_pcd= device_create(class_pcd,NULL,device_nu,NULL,"pcd");  //2nd argument 
 
 
 
+/* clean up function*/
 
+   device_destroy(class_pcd,device_nu);
+  class_destroy(class_pcd);
+  cdev_del(&pcd_cdev);
+ unregister_chrdev_region(device_nu,1);
 
 
 
