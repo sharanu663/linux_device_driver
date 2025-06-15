@@ -263,6 +263,16 @@ dmesg | tail -5  //it show latest 5 kernel messages
 dmesg | head -20  //it show first 20 kernel messages
 
 
+all device file present in the /dev directory in root 
+ every device is register to VFS(virtual file system)
+
+manjor number : basically refer to device 
+miniot number : it refers to instance of same device 
+
+
+
+
+
 
 
 
