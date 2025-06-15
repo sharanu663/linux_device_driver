@@ -76,6 +76,19 @@ kernel space       do_sys_open()
                   chrdev_open()    // replacing default fops with 'cdev' fops
                  your driver open method()
 
+                       close(fd);
+user space           /dev/pcd()
+-------------------------------------------------
+kernel space     
+        |-------|
+        |  VFS  | ---------------> int pcd_release();
+        |-------|
+ Releases the file object.
+called when the last reference to 
+an open file is closed- that is,
+when the f_count field of the file 
+object becomes 0.
+
 
 summary:
 
@@ -105,6 +118,9 @@ macro THIS_MODULE : point to the module that owns this structure; it should usua
 to THIS_MODULE.
 this field is used to prevent the module from being unloaded while structure is in use.
 
+copy_to_user()
+copy_from_user() 
+
 /*device creation*/
 dev_t device_nu
 
@@ -117,6 +133,8 @@ cdev_init(&pcd_cdev,&pcd_fops);
 
 pcd_cdev.ownder = THIS_MODULE;
 cdev_add(&pcd_cdev,device_number,1);
+
+
 
 
 
