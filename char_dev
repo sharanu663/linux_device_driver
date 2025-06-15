@@ -1,1 +1,105 @@
+kernel APIs and utilities to be used in driver code of charcter :
+#include <linux/module.h>
+#include <linux/fs.h>
+#include <linux/cdev.h>
+Dynamically register range of char device number:
+
+creation:
+
+alloc_chrdev_region(dev_t *dev,unsigned baseminor,unsigned count,const char *name); //create device number
+
+dev_t dev : output parameter for first assigned number.
+unsigned baseminor: first of the requested range of minor numbers
+unsigned count: number of minor number required
+char *name : name of the associated device or driver
+
+
+void cdev_init(struct cdev *cdev,const struct file_opertions *fops)   //make a char device registration with the VFS
+struct cdev *cdev : structure initialize
+struct file_opertions *fops file operation for this device
+
+//add a char device to the kernel VFS
+int cdev_add(struct cdev *p,dev_t dev,unsigned count);
+struct cdev *p: cdev structure for the device
+dev_t dev : first device number for which this device is responsible
+unsigned count : number of consecutive minor number crossesponding to this device
+
+class_create();     // create device files
+device_create();
+
+Deletion:
+
+unregister_chrdev_region()
+
+cdev_del();
+
+class_destroy();
+device_destory();
+
+
+whenever user space request some opertion then it will for to VFS(virtual file system)
+later appropriate function get called.
+-------------------------------------------------------------------------------------------
+                fd=open("/dev/pcd",O_RDWR);
+user space      /dev/pcd  
+------------------|-------------------------
+kernel space      | 
+         --------<-|
+         |  VFS |----------> int pcd_open();
+         |----- |             pcd_driver
+opens a file by creating
+a new file object and linking
+it to the corresponding
+inode object.
+--------------------------------------------------------------------------------
+
+struct inode: inode is a VFS data structure that holds general information about a file
+and tracks  interaction on an opened file by the user process, each file has is own inode object,
+which the filesystem uses to identify the file. each inode object associated with an inode number,
+which uniquely identifies the file the filesystem.
+inode object is created and stored in memory as and when a new file (regular or device) gets created.
+
+struct file: 
+
+
+
+
+macro of dev_t is (uint32_t) 
+
+int minor_no =MINOR(device_nu);   //this macro is will give minor
+int major_no = MAJOR(device_nu); // this macro is will give major
+MKDEV(int major,int minor);    //it will give device type
+
+macro THIS_MODULE : point to the module that owns this structure; it should usually be initialized
+to THIS_MODULE.
+this field is used to prevent the module from being unloaded while structure is in use.
+
+/*device creation*/
+dev_t device_nu
+
+alloc_chrdev_region(&device_nu,0,6,"eeprom");
+
+
+struct cdev pcd_cdev;        
+struct file_opertions pcd_fops;   //this structure will provide the various function (read,write,llseek,etc)
+cdev_init(&pcd_cdev,&pcd_fops);
+
+pcd_cdev.ownder = THIS_MODULE;
+cdev_add(&pcd_cdev,device_number,1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
