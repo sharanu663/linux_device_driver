@@ -66,7 +66,33 @@ object for every open of a regular or device file.
 stored information abt the interaction b/w an open file and a process
 "content not written back to disks unlike inode"
 
+these function get called when user space called open function 
 
+user space           open()
+-------------------------------------------------
+kernel space       do_sys_open()
+                  do_filp_open()  // file object allocation 
+                 do_dentry_open()  // default dummy file operation function will called
+                  chrdev_open()    // replacing default fops with 'cdev' fops
+                 your driver open method()
+
+
+summary:
+
+when device file gets created:
+1) create device file using udev
+2) inode object gets created in memory and inode's i_rdev field is initialized with device number
+3) inode object's i_fop field is set to dummy default file opertions(def_chr_fops)
+
+when user process executes open system call
+1) user invokes open system call on the device file
+2) file object get created
+3) inode's i_fop gets copied to file object's f_op (dummy file opertions of char device file)
+4) open function of dummy default file opertion gets called(chrdev_open)
+5) inode object's i_cdev field is initialized with cdev which you added during cdev_add
+   (lookup happens using inode->i_rdev field)
+6) inode->cdev->fops (this is a real fileoperations of your driver) gets copied to file->f_op
+7) file->f_op->open method gets called (read open method of your driver)
 
 
 macro of dev_t is (uint32_t) 
