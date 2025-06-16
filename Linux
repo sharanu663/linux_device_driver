@@ -165,9 +165,31 @@ menaka@menaka-IdeaPad-Slim-3-14IAH8:/lib/modules$ ls
 
 
 
+/**************************************************/
+the lld/source/linux/arch/arm/boot see here uImage copy  and then update the boot partition of the SD card
 
+menaka@menaka-IdeaPad-Slim-3-14IAH8:~/lld/source/linux-5.10.168-ti-rt-r76/arch/arm/boot$ ls
+bootp	    deflate_xip_data.sh  Image	     Makefile  zImage
+compressed  dts			 install.sh  uImage
+menaka@menaka-IdeaPad-Slim-3-14IAH8:~/lld/source/linux-5.10.168-ti-rt-r76/arch/arm/boot$ 
+cp uImage /media/menaka/BOOT/
+sync
+cd dts/
+ls -l am335*
+copy this file 
+cp am335x-boneblack.dtb /media/menaka/BOOT/
+sync
 
+copy the newly installed under host machine /lib/modules/5.10.168 folder to board's /lib/modules
 
+menaka@menaka-IdeaPad-Slim-3-14IAH8:~$ cd lld/source/linux-5.10.168-ti-rt-r76
+menaka@menaka-IdeaPad-Slim-3-14IAH8:~/lld/source/linux-5.10.168-ti-rt-r76$ cd /lib/modules
+menaka@menaka-IdeaPad-Slim-3-14IAH8:/lib/modules$ ls
+5.10.168  6.14.0-15-generic
+menaka@menaka-IdeaPad-Slim-3-14IAH8:/lib/modules$ 
+
+sudo cp -a 5.10.168/ /media/menaka/ROOTFS/lib/modules/
+sync
 
 /***************************notes **************************/
 
