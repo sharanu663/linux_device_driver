@@ -140,6 +140,12 @@ Dynamic device file creation on linux:
 
 the buffer size of kernel 512 bytes
 
+cd /sys/class  : check here your class name
+cd /sys/class/<your_class_name>/sub_directory  : check here your dev file
+cat dev  // shows the major and minor number
+cat uevent  // shows the major and minor and devicename =pcd
+
+
 macro of dev_t is (uint32_t) 
 
 int minor_no =MINOR(device_nu);   //this macro is will give minor
