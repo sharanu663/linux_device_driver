@@ -270,6 +270,11 @@ manjor number : basically refer to device
 miniot number : it refers to instance of same device 
 
 
+// to reslove the kernel UImage error 
+scripts/config --disable KERNEL LZ4
+scripts/config --disable KERNEL GZIP
+
+
 
 
 
