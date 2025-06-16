@@ -246,7 +246,7 @@ copy the cross compiler tool chain path.
 and open sudo vi /etc/sudoers
 go to "secur_path"  got to end :paste here
 
-
+arm-linux-gnueabihf-objdump -h main.ko  //give the inforamtion verious kernel section
 
 In tree building  :adding our module inside the kernel soruce tree and build kernel along our module 
 
