@@ -165,7 +165,7 @@ menaka@menaka-IdeaPad-Slim-3-14IAH8:/lib/modules$ ls
 
 
 
-/**************************************************/
+/***********************compile kernel source and copy to SD Card***************************/
 the lld/source/linux/arch/arm/boot see here uImage copy  and then update the boot partition of the SD card
 
 menaka@menaka-IdeaPad-Slim-3-14IAH8:~/lld/source/linux-5.10.168-ti-rt-r76/arch/arm/boot$ ls
@@ -261,8 +261,9 @@ In tree building  :adding our module inside the kernel soruce tree and build ker
 
 3. go to /char kconfig file add the local kconfig entry to upper level kconfig
     cd ..
-    vi kconfig and add the just created the kconfig file here
-   source "driver/char/my_c_dev/kconfig"
+    vi Kconfig and add the just created the kconfig file here
+   source "drivers/char/my_c_dev/Kconfig"
+
     
 4. create a local Makefile in the new directroy that is my_c_dev
      vim Makefile
