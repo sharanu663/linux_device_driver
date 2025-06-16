@@ -138,7 +138,7 @@ Dynamic device file creation on linux:
 *) for each dev file, which represent a combination of major and minor number for a device
 
 
-
+the buffer size of kernel 512 bytes
 
 macro of dev_t is (uint32_t) 
 
