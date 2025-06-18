@@ -1,0 +1,49 @@
+Firmware is often referred to as “software for hardware.” However, there is a difference between firmware and software. 
+Firmware provides instructions to help hardware start up, communicate with other devices, and perform basic input/output tasks. 
+Software, on the other hand, is installed onto a device and used for interaction, such as browsing the internet, word processing, listening to music, and videoconferencing. 
+
+Hardware manufacturers regularly release firmware updates so their devices remain secure and compatible with new media. 
+For example, Android and iOS devices periodically get firmware updates that enhance their performance, add new features, and protect them against security threats and vulnerabilities. 
+Updates for firmware for devices like game consoles and televisions are typically done by accepting prompts to download and install the latest patch.
+
+Types And Examples Of Firmware
+When a device switches on, the firmware instructs the processor to initiate the startup process. 
+Computers, mobile phones, and tablets operate multiple forms of firmware to perform actions like loading their operating systems.
+Firmware operates in a similar way to device drivers. However, firmware is stored directly on the hardware device, 
+whereas drivers are installed in the device’s operating system. Firmware can also start up by itself, while drivers remain reliant on the operating system.
+
+There are typically three levels of firmware:
+
+Low-level firmware: This firmware is usually stored in non-volatile memory chips like read-only memory (ROM) and one-time programmable (OTP) memory.
+These chips cannot be rewritten or updated, and the firmware is intrinsic to the hardware, such as a computer.
+
+High-level firmware: This firmware is deployed within flash memory chips and comes with more complex instructions that allow updates to be made.
+
+Subsystems: These are semi-independent devices that are part of a more extensive system. 
+Firmware at this level is embedded within central processing units (CPUs), flash chips, and liquid crystal display (LCD) units.
+
+
+Common types of firmware include: 
+
+1. BIOS
+The Basic Input/Output System (BIOS) has been a critical component of computers since the very early days.
+The BIOS sits on a chip in a computer’s motherboard and issues a set of instructions that enables the device’s operating system to load. 
+It is also responsible for looking after a device’s hardware components and ensuring they function correctly upon startup.
+
+When a computer is turned on, the BIOS launches instructions that check the machine’s startup process for potential errors. 
+It starts by checking the random access memory (RAM) and processor for faults, then checks connected devices, such as a keyboard and mouse, for any problems. 
+It then checks for a boot sequence, such as Boot from Compact Disc Read-Only Memory (CD-ROM) and Boot from Hard Drive. 
+Finally, the BIOS connects to the bootloader program, which wakes up the computer’s operating system and loads it in the RAM.
+
+Aside from the device startup process, the BIOS is responsible for checking the Complementary Metal Oxide Semiconductor (CMOS), 
+which is a piece of memory that stores BIOS settings, and other chips on a device. It also checks signals that are sent to the RAM, 
+such as when a user presses a key, to help the operating system understand what action to take. 
+
+2. EFI
+Extensible Firmware Interface (EFI) is a new generation of firmware that issues the instructions that a device’s CPU uses to start the hardware and initiate the bootloader. 
+EFI is a replacement for BIOS and is used in new computers. It offers advantages like ensuring a device only boots trusted software and other cybersecurity benefits.
+
+The original EFI firmware is used in Macs and can only support Intel processors. 
+Unified EFI (UEFI) is a piece of firmware designed to replace the BIOS in new Windows computers and supports AMD and Intel processors. 
+UEFI is used to load and start up operating systems in devices that run Windows 8 and beyond.  
+
