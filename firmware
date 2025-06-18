@@ -14,13 +14,20 @@ whereas drivers are installed in the device’s operating system. Firmware can a
 
 There are typically three levels of firmware:
 
-Low-level firmware: This firmware is usually stored in non-volatile memory chips like read-only memory (ROM) and one-time programmable (OTP) memory.
-These chips cannot be rewritten or updated, and the firmware is intrinsic to the hardware, such as a computer.
+1. Low-level Firmware:
+  1) It is built into device hardware and stored on read-only chips like ROM.
+  2) Characteristics: Can’t be changed or updated; essential for basic functions.
+     Example: BIOS in computers, controlling basic hardware functions.
 
-High-level firmware: This firmware is deployed within flash memory chips and comes with more complex instructions that allow updates to be made.
+2. High-level Firmware:
+  1) It is more complex and stored on flash memory chips.
+  2) Characteristics: Allows updates; adds new features and improvements.
+     Example: Computer firmware used for BIOS updates that enhance performance.
 
-Subsystems: These are semi-independent devices that are part of a more extensive system. 
-Firmware at this level is embedded within central processing units (CPUs), flash chips, and liquid crystal display (LCD) units.
+3. Subsystem Firmware:
+  1) It’s part of embedded systems, comparable to high-level firmware.
+  2) Characteristics: Updatable; provides specialized functionality.
+     Example: Firmware for a server’s power subsystem, enabling independent power management.
 
 
 Common types of firmware include: 
