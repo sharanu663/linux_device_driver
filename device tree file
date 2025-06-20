@@ -1,1 +1,128 @@
-de
+
+1) Some hardware busses provide "discoverability" mechanisms: means that we can identify which device is connected on this busess
+EX: PC(e),USB
+Device can be enumerated and identfied at runtime
+Concept of vendor ID,product ID,device class,etc
+
+2) Some hardware busses do not provide "discoverability" mechanisms: means that we can't identify which device is connected on this busess
+   Ex: i2c,SPI,1wire
+  How does operating system get to know what is topology of hardware?
+ Allow the operating system or bootloader to know things like : provide details of the device that used like pherephiral,clock, number of cores
+
+  how to provide board the details to operating system ? Directly in the OS/bootloader
+  1) using compiled data structures,typically in C
+  2) How it was done on most embedded platforms in linux,U-Boot
+  3) Considered not maintainable/sustainable on ARM32, which motivated the move to another solution.
+   
+
+
+
+
+
+
+device tree will be present on this path: "arch/ARCH/boot/dts"
+
+Device tree : A tree structure describing the hardware is writtern by a developer
+in a device tree source file(.dts)
+processed by the device tree compiler (dtc)
+produces a more efficient representation: device tree Blob, dtb
+Additional C preprocessor pass 
+
+
+Device tree files are not monolithic, they can be split in several files,
+including each other.
+
+.dtsi files are included files,while .dts files are final device trees
+  only .dts files are accepted as input to dtc
+Typically, .dtsi will contain
+   1) definitions of SOC-level information
+   2) definitions common to several boards
+the .dts files contains the board-level infomation
+Allows an including file to override value specified by an included file
+uses the C pre-processor #include directive
+
+
+
+
+
+
+
+
+Now used most Embedded-oriented CPU architecture that run Linux: ARM64,RISC-V,ARM32,
+ Power PC,MIPS,etc
+
+
+
+     I/P                         compiler                        O/P 
+Device tree source (dts)---> Device tree compiler (dtc) ----> Device tree Blob(.dtb)
+
+Disadavantage is : Considered not maintainable/sustainable on ARM32, which motivated the
+                    move to another solution.
+that is called "ACPI" tables : is support on 0x86 system and subset of ARM64 platforms
+                        Tables provided by the Firmware on BIOS in 0x86 system, UFI also
+
+
+ex: foo.dts
+   /dts-v1/ ; 
+ / {
+        welcome = <0xBADCADFE>;
+        bootlin {
+                    webinar = "great";
+                    demo = <1>,<2>,<3>;
+   };
+
+compile command : dtc -I dts -O dtb -o foo.dtb foo.dts
+
+/{
+    node@0{
+         a-string-property = "A String";
+          a-string-list-property = "frist String","second string";
+          a-byte-data-property = [0x01,0x02,0x34,0x54];  #---> bytestring
+
+             child-node@0 {
+                  frist-child-property;
+                  second-child-property = <1>;
+                  a-reference-to-something = <&node1>;
+              };
+
+               child-node@1 {
+                };
+           };
+   
+         node1:node@1 {              
+            an-empty-property;
+            a-cell-property = <1 2 3 4>;
+               
+                child-node@1 {
+                };
+          };
+};
+
+1) node@0 -> node is node name, 0-> unit address
+2)  properties of node@0
+      property name       property value
+    a-string-property =     "A String";
+    a-string-list-property = "frist String","second string";
+    a-byte-data-property = [0x01,0x02,0x34,0x54];
+ 3) line number 72 is  "node1:" is called as label
+ 4) a-cell-property = <1 2 3 4>;   // four cells(32 bits values)
+
+
+another exmple :
+
+/ {
+
+      model = STM32MP157C-DK2 Discovery Board " ; # here you write the modul name of devices which going to support this node
+      compatible = "st,stm32mp157c" ,"st,stm32mp157";   //which are board series will support this node
+      cpus {......};
+      memory@0 {.....};
+      chosen {......};
+      intc: interrupt-controller@a0021000 {.....};
+      soc {
+            i2c1: i2c@400120000 {....};
+            ethernet0: ethernet@5800a000 {......};
+       };
+ };
+
+
+
