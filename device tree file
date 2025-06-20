@@ -32,6 +32,8 @@ Additional C preprocessor pass
 Device tree files are not monolithic, they can be split in several files,
 including each other.
 
+Device tree inheritance :
+
 .dtsi files are included files,while .dts files are final device trees
   only .dts files are accepted as input to dtc
 Typically, .dtsi will contain
@@ -123,6 +125,36 @@ another exmple :
             ethernet0: ethernet@5800a000 {......};
        };
  };
+
+"**) how to overwrite value that is given in .dtsi in default 
+     below example we change status "disable" to "okay" using .dts file, final output will get status = "okay"
+  ex:  soc.dtsi
+      /{ 
+        soc {
+               usart: serial@sc00000 {
+               compatible = "st,stm32h7-uart";
+               reg=<0x5c000 0x4000>;
+               status = "disable";
+                };
+           };
+       };
+   
+ board.dts
+   #include "soc.dtsi
+   /{ 
+        soc {
+            serial@sc00000 {
+            status = "okay";
+            };
+         };
+       };
+   
+   or
+  board.dts
+   #include "soc.dtsi 
+      &usart {
+       status = "okay"; 
+       };
 
 
 
