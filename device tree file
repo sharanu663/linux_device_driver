@@ -163,5 +163,62 @@ another exmple :
        status = "okay"; 
        };
 
+compatible propert: it is used by the operating system to find the appropriate
+drvier for this device.
+when describing real hardware,typical from is vendor,model
+special value : simple bus -> bus where all sub nodes are memory-mapped devices
+
+reg : use as memory mapped : <base pyhsical address and size of the memory-mapped register.
+ex: reg = <0x5000243 0x03>
+if reg using as i2c : address of the device on the I2C bus
+ ex: 
+    &i2c1 {
+        cs4251:cs4251@4 {
+         reg = <0x04>;
+        };
+     };
+ in spi:
+        &qspi {
+        flash1:mx4421213 {
+         reg = <1>;
+        };
+     };
 
 
+cell concept :
+1)Interger values represented as 32-bit integers called cells
+2) encoding a 64-bit value requires two cells
+3) #address-cells and #size-cells : how many cells are used in sub-nodes
+to encode the address and size in the reg property
+
+ex:  soc {
+       compatible = "simple-bus";
+         #address-cells = <1>;
+         #size-cells = <1>;
+
+         i2c@f1001000 {
+             reg = <f1001000 0x1000>;
+            #address-cells = <1>;
+            #size-cells = <0>;
+            eeprom@52{
+               reg = <0x52>;
+            };
+         };
+     };
+
+   ex:
+   soc {
+        clkc: clock@f1003000 {
+       compatible = "foo,bar-clock";
+        reg = <f1003000 0x1000>;
+        #clock-cells = <3>;
+        };
+       i2c@f1001000 {
+           clocks = <&clkc 12,24,32>;
+        };
+  };
+       
+
+status : two values "okay" or "ok" and "disabled" 
+           "okay" or "ok"  : device is really in use
+            "disabled" or ther value : device is not used  
