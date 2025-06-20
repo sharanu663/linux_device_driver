@@ -1,4 +1,11 @@
 
+device tree bindings :
+https://www.kernel.org/doc/Documentation/devicetree/bindings/
+
+device tree spection document tell abt systex:
+https://github.com/devicetree-org/devicetree-specification/releases/tag/v0.4
+
+
 1) Some hardware busses provide "discoverability" mechanisms: means that we can identify which device is connected on this busess
 EX: PC(e),USB
 Device can be enumerated and identfied at runtime
