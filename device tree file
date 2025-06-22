@@ -71,6 +71,223 @@ that is called "ACPI" tables : is support on 0x86 system and subset of ARM64 pla
                         Tables provided by the Firmware on BIOS in 0x86 system, UFI also
 
 
+Node name is in the format systex : node-name@unit-address
+
+node-name:
+The node-name component specifies the name of the node. It shall be 1 to 31 characters in length
+
+ Character
+ 0-9                digit
+ a-z               lowercase letter
+ A-Z               uppercase letter
+ ,                 comma
+ .                 period
+ _                 underscore
+ +                 plus sign
+ -                  dash
+node-name should mention in the generic name (like what type peripherals, protocal name)
+
+ • adc
+ • accelerometer
+ • air-pollution-sensor
+ • atm
+ • audio-codec
+ • audio-controller
+ • backlight
+ • bluetooth
+ • bus
+ • cache-controller
+ • camera
+ • can
+ • charger
+ • clock
+ • clock-controller
+ • co2-sensor
+ • compact-flash
+ • cpu
+ • cpus
+ • crypto
+ • disk
+ • display
+ • dma-controller
+ • dsi
+ • dsp
+ • eeprom
+ • efuse
+ • endpoint
+ • ethernet
+ • ethernet-phy
+ • fdc
+ • flash
+ • gnss
+ • gpio
+ • gpu
+ • gyrometer
+ • hdmi
+ • hwlock
+ • i2c
+ • i2c-mux
+ • ide
+ • interrupt-controller
+ • iommu
+ • isa
+ • keyboard
+ • key
+ • keys
+ • lcd-controller
+ • led
+ • leds
+ • led-controller
+ • light-sensor
+ • lora
+ •magnetometer
+ •mailbox
+ •mdio
+ •memory
+ •memory-controller
+ •mmc
+ •mmc-slot
+ •mouse
+ • nand-controller
+ • nvram
+ • oscillator
+ • parallel
+ • pc-card
+ • pci
+ • pcie
+ • phy
+ • pinctrl
+ • pmic
+ • pmu
+ • port
+ • ports
+ • power-monitor
+ • pwm
+ • regulator
+ • reset-controller
+ • rng
+ • rtc
+ • sata
+ • scsi
+ • serial
+ • sound
+ • spi
+ • spmi
+ • sram-controller
+ • ssi-controller
+ • syscon
+ • temperature-sensor
+ • timer
+ • touchscreen
+ • tpm
+ • usb
+ • usb-hub
+ • usb-phy
+ • vibrator
+ • video-codec
+ • vme
+ •watchdog
+ •wif
+
+
+
+unit-address: basically tell about base address of the component or any peripherls in the board 
+1) The unit-address component of the nameis specific to the bus type on which the node sits.
+2) The unit-address must match the first address specified in the reg property of the node.
+   If the node has no reg property, the @unit-address must be omitted(negalate) and the node-name alone differentiates the
+   node from other nodes at the same level in the tree.
+3) In the case of node-name without an @unit-address the node-name shall be unique from any property names at the same
+   level in the tree.
+4) The root node does not have a node-name or unit-address. It is identified by a forward slash (/).
+
+
+different types of properties:
+standard and non-standard property (custom property)
+  1) standard property are thos which is explained by the specification
+      and the deivce-binding documentation
+  2) custom properties are specific to a particular vendor or organization which
+      is not documented by the specification.
+  
+
+uses of compatible property
+ 1) machine identification and initialization 
+ 2) match and load the appropriate driver for the device
+
+using compatible name  we can find out the driver and call the prob function when kernel going to initialize 
+
+
+In the linux source tree : linux-5.4/arch/arm/boot/dts
+      drivers:   linux-5.4/drivers/i2c/busses/i2c-omap.c 
+eeprom  device :   linux-5.4/drivers/misc/eeprom/at24.c
+
+
+device tree bindings:
+How do you know the whic property name and value pair should be used to
+ describe a node in the device tree?
+     device tree binding document. the driver writer must document these details
+  linux-5.4/Documentation/devicetree/bindings/i2c/i2c-omap.txt 
+ give overview information all the properties  
+
+Device tree bindings -points to remember:
+case 1 :  When the driver is already available in the linux kernel for the deivce 'x',
+but you just need to add device 'x' entry in the device tree then you must consult 'x' driver binding document which
+guides you through creating device tree node for device 'x'.
+
+check driver is present or not :
+ex: lm75 temprature sensor:
+linux-5.4/Documentation/devicetree/bindings/hwmon/lm75.txt 
+linux-5.4/drivers/hwmon/lm75.c
+
+
+Case2 : when the driver is not availabel for the device 'x', then you should write you own driver, you should
+decide what properties to use(could be a combination of standard and non-standard property),
+you should then provide the deive tree binding document describing what are all the properties and compatible strings a device tree write nust include.
+
+
+
+
+
+
+ex: 
+(master)
+   i2c-0 <----------|
+                    |------------ slave device 1 (slave address is 0x24)
+                    |------------ slave device 2 (slave address is 0x50)
+for example:
+In soc level dtsi file will get i2c0 related information 
+ /{
+    i2c0: i2c@44e0b000{                  // base address of i2c0
+         compatible = "ti,omap4-i2c";
+         #address-cell = <1>;
+         #size-cell = <0>;
+        ti,hwmods = <70>;
+         reg = <44e0b000 0x1000>;          // base address of i2c0 and offset
+         interrupts = <70>;
+         status = "disabled";
+     };
+
+  };
+
+now we to provide what are deivce is connected on this bus and if you want changes anything you can change parameter values
+how to asscess? using label name through we can access  what is label name here? see above soc level dtsi file :  i2c0 
+dts file
+
+  /{
+ 
+     &i2c0{
+
+          status = "okay";
+          clock-frequency = <40000>;
+          tps: tps@24 {        // child node of i2c0 and 24 is slave1 adress
+             reg = <0x24>;      // slave 1 address
+             };
+
+           baseboard_eeprom: baseboard_eeprom@50 {        // child node of i2c0 and 50 is slave2 adress
+             reg = <0x50>;      // slave 2 address
+             };
+      };
+   };
+
 ex: foo.dts
    /dts-v1/ ; 
  / {
@@ -138,7 +355,7 @@ another exmple :
   ex:  soc.dtsi
       /{ 
         soc {
-               usart: serial@sc00000 {
+               usart: serial@5c00000 {
                compatible = "st,stm32h7-uart";
                reg=<0x5c000 0x4000>;
                status = "disable";
@@ -150,7 +367,7 @@ another exmple :
    #include "soc.dtsi
    /{ 
         soc {
-            serial@sc00000 {
+            serial@5c00000 {
             status = "okay";
             };
          };
@@ -222,3 +439,7 @@ ex:  soc {
 status : two values "okay" or "ok" and "disabled" 
            "okay" or "ok"  : device is really in use
             "disabled" or ther value : device is not used  
+
+
+
+
