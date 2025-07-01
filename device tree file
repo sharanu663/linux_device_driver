@@ -1,4 +1,25 @@
 
+
+
+
+
+
+Nordic build system using zephyr os :
+
+Kconfig    -------->|
+                    |
+                    |---------> Cmake -------->Ninja-------->gcc
+                    |
+Device tree ------->|  
+
+
+
+
+
+
+
+
+
 device tree bindings :
 https://www.kernel.org/doc/Documentation/devicetree/bindings/
 
