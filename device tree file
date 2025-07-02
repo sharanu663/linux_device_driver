@@ -37,6 +37,9 @@ here -DDTC_OVERLAY_FILE=boards/esp32.overlay (path of .overlay file ) command go
 west is meta tool here that tells zephyr we want to build our project and it's going to call the CMake in order to make that happen
 
 
+if getting build issue:like permissoin 
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force
+
 
 
 
