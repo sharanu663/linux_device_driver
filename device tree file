@@ -19,6 +19,11 @@ west build -p always -b <board_name>  -- -DDTC_OVERLAY_FILE=boards/esp32.overlay
  below mention command after build command  whatever giving that paramters going to cmake, not west
 here -DDTC_OVERLAY_FILE=boards/esp32.overlay (path of .overlay file ) command going to cmake file
 
+without west tool how to build:
+cmake -G "Ninja" -DBOARD=<board_name> -DDTC_OVERLAY_FILE=boards/esp32.overlay -B build -S.
+build command:
+cmake --build build
+
 /{
 
     aliases{
@@ -41,6 +46,53 @@ if getting build issue:like permissoin
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force
 
 
+
+app
+|          |---> include --> test.h   
+|---> src---
+|          |----> src----> test.c and main.c
+CMakeLists.txt
+prj.conf
+
+
+cmake example above file structure:
+
+cmake_minimum_required(VERSION 3.20.0)
+
+#name the project
+project (hello_word
+         VERSION 1.0
+         DESCRIPTION "the classic"
+         LANGUAGES C)
+#Create a static library target named "my_lib"
+add_library(my_lib
+    STATIC
+    src/my_lib.c)
+
+#set the include directories for the library.PUBLIC adds the
+#directory to the search path for any target that link to this library.
+target_include_directories(my_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+#create an executable target with the same name as the project name
+add_executable(${PROJECT_NAME} src/main.c)
+
+#link the library to the executable. PRIVATE means that the library is not 
+# exposed to targets that depend on this target.
+target_link_libraries(${PROJECT_NAME} PRIVATE my_lib)
+
+
+
+build:
+-S is source path, -B create build directory  , -G tell to generate Ninja build file
+cmake -S . -B build -G "Ninja"
+
+executable file  :
+cmake --build build
+
+
+
+modern-cmake guid:
+https://cliutils.gitlab.io/modern-cmake/README.html
 
 
 
