@@ -117,7 +117,8 @@ cmake --build build
 modern-cmake guid:
 https://cliutils.gitlab.io/modern-cmake/README.html
 
-
+yaml:
+https://spacelift.io/blog/yaml
 
 
 device tree bindings :
