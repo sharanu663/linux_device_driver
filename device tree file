@@ -112,7 +112,8 @@ cmake -S . -B build -G "Ninja"
 executable file  :
 cmake --build build
 
-
+pratical_zephyr_dt
+https://interrupt.memfault.com/blog/practical_zephyr_dt
 
 modern-cmake guid:
 https://cliutils.gitlab.io/modern-cmake/README.html
