@@ -27,16 +27,39 @@ cmake --build build
 /{
 
     aliases{
-        my-led = &led0           //here label refernce of led0 and giving aliases name as my-led
+        my-led = &led0;          //here label refernce of led0 and giving aliases name as my-led
     };
     leds{
-        compatible = "gpio-leds"
+        compatible = "gpio-leds";
         led0: d13 {
            gpios = <&gpio0 13 GPIO_ACTIVATE_HIGH>;
         };
 
      };
 };
+
+
+another example of esp32 board :
+our application creating boards folder and create a file esp32s3_devkitc.overlay under board directory itself
+we are changing the some of the parmeter or setup for device tree
+
+/{
+
+    aliases{
+        my-led = &button_1           //here label refernce of led0 and giving aliases name as my-led
+    };
+    buttons{
+        compatible = "gpio-keys";
+        debounce-interval-ms = <50>  // here we are changing the default debounce time
+        polling-mode;
+
+        button_1: d5 {
+           gpios = <&gpio0 5 (GPIO_ACTIVATE_LOW | GPIO_PULL_UP)>;
+        };
+
+     };
+};
+
 
 
 west is meta tool here that tells zephyr we want to build our project and it's going to call the CMake in order to make that happen
