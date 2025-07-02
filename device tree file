@@ -12,7 +12,29 @@ Kconfig    -------->|
                     |
 Device tree ------->|  
 
+On:ESP32:
+build command 
+west build -p always -b <board_name>  -- -DDTC_OVERLAY_FILE=boards/esp32.overlay (path of .overlay file ) 
 
+ below mention command after build command  whatever giving that paramters going to cmake, not west
+here -DDTC_OVERLAY_FILE=boards/esp32.overlay (path of .overlay file ) command going to cmake file
+
+/{
+
+    aliases{
+        my-led = &led0           //here label refernce of led0 and giving aliases name as my-led
+    };
+    leds{
+        compatible = "gpio-leds"
+        led0: d13 {
+           gpios = <&gpio0 13 GPIO_ACTIVATE_HIGH>;
+        };
+
+     };
+};
+
+
+west is meta tool here that tells zephyr we want to build our project and it's going to call the CMake in order to make that happen
 
 
 
