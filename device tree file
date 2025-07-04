@@ -129,6 +129,14 @@ device tree spection document tell abt systex:
 https://github.com/devicetree-org/devicetree-specification/releases/tag/v0.4
 
 
+github account: example code on esp32 using zephyr rtos 
+https://github.com/ShawnHymel/workshop-zephyr-device-driver
+https://www.youtube.com/watch?v=mTJ_vKlMS_4&list=PLEBQazB0HUyTmK2zdwhaf8bLwuEaDH-52
+
+youtube link of stm32 using zephyros 
+https://www.youtube.com/watch?v=hkYtD_JjzIY
+
+
 
 Below details about stm32f401er device tree :
 dts file:
