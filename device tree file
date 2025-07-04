@@ -160,12 +160,18 @@ modules
 |->button
     |->drivers
        |->button
-           |->button.h , button.c , CMakeLists.txt
-     CMakeLists.txt
-            
+           |->button.h , button.c , CMakeLists.txt Kconfig
+       |CMakeLists.txt Kconfig
+    |CMakeLists.txt Kconfig            
+    |--> dts
+         |-> bindings
+             |-->input 
+                 |-->custom,button.yaml
+    |->zephyr
+       |--> module.yaml
 
 
-button.h
+button.h:
 
 #ifndef ZEPHYR_DRIVERS_H
 #define ZEPHYR_DRIVERS_H
@@ -192,7 +198,7 @@ struct button_config {
 
 
 
-button..c
+button.c:
 
 
 //we need to create compatible field symbol or string  that lets zephyr knows that this is driver code for the compatible 
@@ -321,7 +327,7 @@ DT_INST_FOREACH_STATUS_OKAY(BUTTON_DEFINE)
 
 
 
- modules/button/drivers/button/CMakeLists.txt
+ modules/button/drivers/button/CMakeLists.txt:
 
 
 #Declares the current directroy as a zephyr library
@@ -339,7 +345,7 @@ zephyr_include_directories(.)
 
 
 
-modules/button/drivers/CMakeLists.txt
+modules/button/drivers/CMakeLists.txt:
 
 #custom zephyr function that imports the button/ subdirectroy if the Kconfig
 # option CUSTOM_BUTTON is defined
@@ -348,7 +354,7 @@ add_subdirectory_ifdef(CONFIG_CUSTOM_BUTTON button)
 
 
 
-modules/button/CMakeLists.txt
+modules/button/CMakeLists.txt:
 
 
 add_subdirectory(drivers)
@@ -358,7 +364,7 @@ zephyr_include_directories(drivers)
 
 
 
- modules/button/drivers/button/Kconfig
+ modules/button/drivers/button/Kconfig:
 
 config CUSTOM_BUTTON
   bool "custom button"
@@ -368,15 +374,41 @@ config CUSTOM_BUTTON
     Enable the custom button driver.
 
 
- modules/button/drivers/Kconfig
+ modules/button/drivers/Kconfig:
 
 rsource "button/Kconfig"
 
-modules/button/Kconfig
+modules/button/Kconfig:
 
 rsource "drivers/Kconfig"
 
 
+modules/button/dts/bindings/input/custom,button.yaml:
+
+ #description of the device 
+description: custom button
+
+#Compatibility string that matches the one in the devicetree source and 
+#DT_DRV_COMPAT macro in the driver source code 
+compatible: "custom,button"
+
+
+#Define the required node properties
+properties:
+  pin:
+    type: phandle
+    required: true
+
+
+modules/button/zephyr/module.yaml:
+
+
+name: button
+build:
+  cmake: .
+  Kconfig: Kconfig
+  setting:
+    dts_root: .
 
 
 
