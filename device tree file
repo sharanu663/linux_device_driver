@@ -244,7 +244,7 @@ static int button_init(const struct device *dev)
 
 }
 
-static int button_state_init(const struct device *dev,uint8_t *state)
+static int button_state_get(const struct device *dev,uint8_t *state)
 {
        int ret;
 
@@ -271,14 +271,30 @@ static int button_state_init(const struct device *dev,uint8_t *state)
 
 // devicetree handling
 
+static const struct button_api button_api_funcs = {
+
+  .get = button_state_get,
+};
 
 
 
+// Expansion macro to define driver instances 
 
+// this macro will create multipal instance of this driver code for different multipal button
+#define BUTTON_DEFINE(inst)                                                   \
+/*create an instance of the config struct,populate with DT values*/           \
 
+static const struct button_config button_config_##inst = {                     \
 
+    .btn = GPIO_DT_SPEC_GET(DT_PHANDLE(DT_INST(inst,custom_button),pin),gpio),  \
+    .id = inst                                                                  \
+};                                                                              \
 
-
+/* Create a "device" instance from a devicetree node identifier and */           \
+/* registers the init function to run during boot. */                            \
+DEVICE_DT_INST_DEFINE(inst,button_init,NULL,NULL,&button_config_##inst,          \
+                      POST_KERNEL,CONFIG_GPIO_INIT_PRIORITY,                    \
+                      &button_api_funcs);                                       \
 
 
 
