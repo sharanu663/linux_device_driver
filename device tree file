@@ -154,6 +154,151 @@ compatible: "st,stm32-adc" is match to  #define DT_DRV_COMPAT st_stm32_adc
 
 
 
+Below example about esp32 driver create :
+
+modules
+|->button
+    |->drivers
+       |->button
+           ->button.h , button.c
+
+
+button.h
+
+#ifndef ZEPHYR_DRIVERS_H
+#define ZEPHYR_DRIVERS_H
+
+#include <zephyr/drivers/gpio.h>
+
+
+// we declare our own api function
+struct button_api {
+   int (get*)(const struct device *dev,unit8_t *state);
+
+};
+
+//configuration
+struct button_config {
+  struct gpio_dt_spec btn;
+  uint32_t id;
+
+};
+
+
+#endif 
+
+
+
+
+button..c
+
+
+//we need to create compatible field symbol or string  that lets zephyr knows that this is driver code for the compatible 
+//listed in the binding yml file as well as the compatible property in the device tree  
+//ties to the 'compatible = "custom,button" ' node in the device tree
+
+#define DT_DRV_COMPAT custom_button
+
+
+#include  <error.h>
+#include "button.h"
+
+#include <zephyr/logging/log.h>
+
+// Enable logging at CONFIG_LOG_DEFAULT_LEVEL 
+LOG_MODULE_REGISTER(button)  // here we registering the modules
+
+
+//--------------------------------------------------------------
+ // private function 
+static int button_init(const struct device *dev);  // this function get called after boot and initalize the module 
+static int button_state_init(const struct device *dev,uint8_t *state);
+
+//-----------------------------------------------------------------------------
+
+
+static int button_init(const struct device *dev)
+{
+    int ret;
+
+   // cast device.config (declared const void *) to our button's config
+  const struct button_config *cfg = (const struct button_config *)dev->config;
+
+ // get the button struct from the config
+  const struct gpio_dt_spec *btn = &cfg->btn;
+
+  LOG_DBG("initalizing button (instance ID = %u)\n", cfg->id);
+
+  if(gpio_is_ready_dt(btn)){
+     LOG_ERR("GPIO is not ready/n");
+     return -ENODEV;
+
+  }
+  ret = gpio_pin_configure_dt(btn,GPIO_INPUT);
+  if(ret < 0) {
+     LOG_ERR("GPIO configuration is failed/n");
+     return -ENODEV;
+
+  }
+  return 0;
+
+}
+
+static int button_state_init(const struct device *dev,uint8_t *state)
+{
+       int ret;
+
+   // cast device.config (declared const void *) to our button's config
+  const struct button_config *cfg = (const struct button_config *)dev->config;
+
+ // get the button struct from the config
+  const struct gpio_dt_spec *btn = &cfg->btn;
+
+
+  ret = gpio_pin_get_dtc(btn);
+  if(ret < 0) {
+     LOG_ERR("GPIO is not ready failed/n");
+     return ret;
+   }else {
+
+      *state = ret;
+  }
+}
+
+
+
+//---------------------------------------------------------------------------
+
+// devicetree handling
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 1) Some hardware busses provide "discoverability" mechanisms: means that we can identify which device is connected on this busess
 EX: PC(e),USB
