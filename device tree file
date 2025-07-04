@@ -129,6 +129,32 @@ device tree spection document tell abt systex:
 https://github.com/devicetree-org/devicetree-specification/releases/tag/v0.4
 
 
+
+Below details about stm32f401er device tree :
+dts file:
+/home/menaka/zephyrproject/zephyr/dts/arm/st/f4/stm32f4.dtsi
+/home/menaka/zephyrproject/zephyr/dts/arm/st/f4/stm32f401Xe.dtsi
+
+using : compatible = "st,stm32f4-adc", "st,stm32-adc";
+name search for binding file
+
+/home/menaka/zephyrproject/zephyr/dts/bindings/adc/st,stm32f4-adc.yaml
+
+/home/menaka/zephyrproject/zephyr/dts/bindings/adc/st,stm32-adc.yaml
+|->/home/menaka/zephyrproject/zephyr/dts/bindings/adc/adc-controller.yaml
+    |-> /home/menaka/zephyrproject/zephyr/dts/bindings/base/base.yaml
+          |-> /home/menaka/zephyrproject/zephyr/dts/bindings/base/pm.yaml
+|->/home/menaka/zephyrproject/zephyr/dts/bindings/pinctrl/pinctrl-device.yaml
+
+driver adc :
+compatible: "st,stm32-adc" is match to  #define DT_DRV_COMPAT st_stm32_adc
+/home/menaka/zephyrproject/zephyr/drivers/adc/adc_stm32.c
+/home/menaka/zephyrproject/zephyr/include/zephyr/drivers/adc.h
+  |-> /home/menaka/zephyrproject/zephyr/include/zephyr/device.h
+
+
+
+
 1) Some hardware busses provide "discoverability" mechanisms: means that we can identify which device is connected on this busess
 EX: PC(e),USB
 Device can be enumerated and identfied at runtime
