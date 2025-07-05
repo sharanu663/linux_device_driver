@@ -136,6 +136,8 @@ https://www.youtube.com/watch?v=mTJ_vKlMS_4&list=PLEBQazB0HUyTmK2zdwhaf8bLwuEaDH
 youtube link of stm32 using zephyros 
 https://www.youtube.com/watch?v=hkYtD_JjzIY
 
+how to write device tree for HAL driver for that how to create the devie driver 
+https://docs.zephyrproject.org/latest/build/dts/howtos.html#set-devicetree-overlays
 
 
 Below details about stm32f401er device tree :
@@ -533,6 +535,151 @@ CONFIG_LOG_DEFAULT_LEVEL=4
 
 
 
+Devicetree build flow:
+
+   device binding -------->|
+                           |
+                           |---------> generated c header -------->devicetree.h-------->zephyr and application source code files
+                           |
+ Devicetree source ------->|  
+All Zephyr and application source code files can include and use devicetree.h. This includes device drivers, applications, tests, the kernel, etc.
+
+
+
+Property type                 How to write                  Example
+
+string                       Double quoted              a-string = "hello, world!";
+
+int                  between angle brackets (< and >)        an-int = <1>;
+
+boolean            for true, with no value                    my-true-boolean;
+                 (for false, use /delete-property/)        
+
+array          between angle brackets (< and >),            foo = <0xdeadbeef 1234 0>;
+                 separated by spaces                      
+
+uint8-array       in hexadecimal without leading 0x,         a-byte-array = [00 01 ab];
+                  between square brackets ([ and ]).          
+
+string-array        separated by commas                    a-string-array = "string one", "string two", "string three";
+
+phandle            between angle brackets (< and >)             a-phandle = <&mynode>;
+
+phandles          between angle brackets (< and >),            some-phandles = <&mynode0 &mynode1 &mynode2>;
+                      separated by spaces                      
+
+phandle-array       between angle brackets (< and >),          a-phandle-array = <&mynode0 1 2>, <&mynode1 3 4>;
+                        separated by spaces  
+
+
+
+/dts-v1/;
+
+/ {
+     chosen {
+             zephyr,console = &uart0;
+     };
+
+     aliases {
+             my-uart = &uart0;
+     };
+
+     soc {
+             uart0: serial@12340000 {
+                     ...
+             };
+     };
+};
+
+The /aliases and /chosen nodes do not refer to an actual hardware device. Their purpose is to specify other nodes in the devicetree.
+
+Above, my-uart is an alias for the node with path /soc/serial@12340000. Using its node label uart0, the same node is set as the value of the chosen zephyr,console node.
+
+Zephyr sample applications sometimes use aliases to allow overriding the particular hardware device used by the application in a generic way. For example, Blinky uses this to abstract the LED to blink via the led0 alias.
+
+The /chosen node’s properties are used to configure system- or subsystem-wide values. See Chosen nodes for more information.
+
+input files:
+
+There are four types of devicetree input files:
+
+    sources (.dts)
+
+    includes (.dtsi)
+
+    overlays (.overlay)
+
+    bindings (.yaml)
+
+The devicetree files inside the zephyr directory look like this:
+
+boards/<ARCH>/<BOARD>/<BOARD>.dts
+dts/common/skeleton.dtsi
+dts/<ARCH>/.../<SOC>.dtsi
+dts/bindings/.../binding.yaml
+
+
+Get a struct device from a devicetree node:
+
+When writing Zephyr applications, you’ll often want to get a driver-level struct device corresponding to a devicetree node.
+For example, with this devicetree fragment, you might want the struct device for serial@40002000:
+
+/ {
+        soc {
+                serial0: serial@40002000 {
+                        status = "okay";
+                        current-speed = <115200>;
+                        /* ... */
+                };
+        };
+
+        aliases {
+                my-serial = &serial0;
+        };
+
+        chosen {
+                zephyr,console = &serial0;
+        };
+};
+
+using one of this option we will get the device node identification :
+
+/* Option 1: by node label */
+#define MY_SERIAL DT_NODELABEL(serial0)
+
+/* Option 2: by alias */
+#define MY_SERIAL DT_ALIAS(my_serial)
+
+/* Option 3: by chosen node */
+#define MY_SERIAL DT_CHOSEN(zephyr_console)
+
+/* Option 4: by path */
+#define MY_SERIAL DT_PATH(soc, serial_40002000)
+
+ex:
+
+const struct device *const uart_dev = DEVICE_DT_GET(MY_SERIAL);
+
+if (!device_is_ready(uart_dev)) {
+        /* Not ready, do not use */
+        return -ENODEV;
+}
+
+For exaample I need to check whather my device is initialized or not, using this macro will check DT_NODE_HAS_STATUS if status is "okay"
+then initialized succesful, otherwise failed:
+
+#define MY_SERIAL DT_NODELABEL(my_serial)
+
+#if DT_NODE_HAS_STATUS(MY_SERIAL, okay)
+const struct device *const uart_dev = DEVICE_DT_GET(MY_SERIAL);
+#else
+#error "Node is disabled"
+#endif
+
+or using: device_get_binding
+
+const char *dev_name = /* TODO: insert device name from user */;
+const struct device *uart_dev = device_get_binding(dev_name);
 
 
 
