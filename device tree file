@@ -863,7 +863,7 @@ we have to do like this
 ex: 
    particular board .dts file like this present 
     &spi2 {
-	pinctrl-0 = <&default_pins>;    // like this  //  default_pins are define in pintctrl.dtsi files
+	pinctrl-0 = <&default_pins>;    // like this  //  default_pins are define in pintctrl.h files
 	pinctrl-names = "default";
 	status = "okay";
    };
