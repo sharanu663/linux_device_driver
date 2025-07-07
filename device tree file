@@ -869,6 +869,23 @@ ex:
    };
 
    overlay file 
+
+   /{
+       chosen {
+		zephyr,disply = &node_labe     // your display node lable mention here
+	};
+
+	mipi_dibi{
+
+		mention related to compatible 
+		reset_pin
+		spi-dev = <&spi2>;   //display will using spi2 
+
+
+     	}
+
+
+   };
    
    &spi2{
    
