@@ -853,6 +853,49 @@ foo-cells:
 
 
 
+/*****************************************************************/
+how to over write existence  configure file for example:
+
+In existence dts file spi pins configured default pin but project we are using different pins that 
+we have to do like this 
+
+
+ex: 
+   particular board .dts file like this present 
+    &spi2 {
+	pinctrl-0 = <&default_pins>;    // like this  //  default_pins are define in pintctrl.dtsi files
+	pinctrl-names = "default";
+	status = "okay";
+   };
+
+   overlay file 
+   
+   &spi2{
+   
+      pinctrl-0 = <&custom_pins>;
+      status = "okay";
+   };
+   
+   pinctrl1{
+   	custom_pins:custom_pins_spi{   // create you own child node and copy exitence default pin defined formate and make pin change number on overlay file
+   	
+   		group1{
+   	
+   			pinmux = < here you can modify pins number which are using for your project for spi>;
+   	
+   		};
+   		group2{
+   	
+   			pinmux = < here you can modify pins number which are using for your project for spi>;
+   	
+   		};
+   	
+   	};     
+   };
+
+/*********************************************************************************/
+
+
 
 
 
