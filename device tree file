@@ -24,6 +24,36 @@ cmake -G "Ninja" -DBOARD=<board_name> -DDTC_OVERLAY_FILE=boards/esp32.overlay -B
 build command:
 cmake --build build
 
+ex:
+
+/ {
+  	leds {
+  		compatible = "gpio-leds";
+  		led_0 {
+  			gpios = <&gpio0 1 GPIO_ACTIVE_LOW>;
+  		};
+  		led_1 {
+  			gpios = <&gpio0 2 GPIO_ACTIVE_HIGH>;
+  		};
+  		led_2 {
+  			gpios = <&gpio1 15 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+  		};
+  	};
+  };
+
+  Above:
+
+  - led_0 is pin 1 on gpio0. The LED is on when the pin is low,
+    and off when the pin is high.
+  - led_1 is pin 2 on gpio0. The LED is on when the pin is high,
+    and off when it is low.
+  - led_2 is pin 15 on gpio1. The LED is on when the pin is low,
+    and the pin's internal pull-up resistor should be enabled.
+
+
+
+ex: 
+
 /{
 
     aliases{
