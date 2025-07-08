@@ -69,6 +69,65 @@ ex:
 };
 
 
+we can do above one example in stm32 baord also along that another option is that 
+
+in overlay file mention 
+/{
+    zephyr,user {
+        gpios = <&gpioa 5 GPIO_ACTIVE_HIGH>;
+    };
+ };
+
+
+in main.c file
+
+#include <stddef.h>
+#include <stdint.h>
+
+#include <zephyr/device.h>
+#include <zephyr/devicetree.h>
+#include <zephyr/kernel.h>
+#include <zephyr/sys/printk.h>
+#include <zephyr/sys/util.h>
+#include <zephyr/drivers/gpio.h>
+
+//if you are using zephyr,user in overlay file then use below  line and remove the  #define LED0_NODE and static const struct gpio_dt_spec led1 line 
+static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(DT_PATH(zephyr_user), gpios);
+
+//if you are using above example kind of overlay file then use below two line remove the above line  static const struct gpio_dt_spec led 
+#define LED0_NODE DT_ALIAS(my_out)
+static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
+
+#define SLEEP_TIME_MS   1000
+int main()
+{
+ int ret;
+if (!gpio_is_ready_dt(&led)) {
+    printk("error: led are not ready\n");
+    return 0;
+}
+
+  ret = gpio_pin_configure_dt(&led, GPIO_OUTPUT);
+	if (ret < 0) {
+		return 0;
+	}
+   while(1) {
+
+        int val =0;
+     val = gpio_pin_get_dt(&in_but);
+
+
+      	gpio_pin_set_dt(&led, 1);
+         k_msleep(SLEEP_TIME_MS);
+        gpio_pin_set_dt(&led, 0);
+       k_msleep(SLEEP_TIME_MS);
+
+   }
+}
+
+
+
+
 another example of esp32 board :
 our application creating boards folder and create a file esp32s3_devkitc.overlay under board directory itself
 we are changing the some of the parmeter or setup for device tree
@@ -89,6 +148,7 @@ we are changing the some of the parmeter or setup for device tree
 
      };
 };
+
 
 
 
