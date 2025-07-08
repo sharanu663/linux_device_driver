@@ -913,6 +913,21 @@ ex:
 /*********************************************************************************/
 
 
+How to delete the property if defined dts and dtsi file : for that take phandle reference or node path use the "/delete-property/" later you mention
+property name, which property decided to delete
+/***********************************************************************/
+/ {
+	aliases {
+		i2c-0 = &i2c1;
+	};
+};
+
+&i2c1 {
+	/delete-property/ clock-frequency;
+	clock-frequency = <I2C_BITRATE_FAST>;
+};
+
+
 
 
 
