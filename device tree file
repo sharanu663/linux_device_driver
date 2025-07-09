@@ -997,7 +997,11 @@ interrupt-parent: is a phandle that points to the interrupt controller for the
 current node.there is generally a top-level interrupt-parent definition for the main
 interrupt controller.
 
-
+1)pinctrl: subsystem allows to manage pin muxing
+2)the pinctrl-<n> properties allow to give the list of pinctrl configuration
+needed for a certain state of the device
+3) the pinctrl-names property allows to give a name to each state
+4) when a device is probed,its "default" pinctrl state is requested automatically.
 
 
 1) Some hardware busses provide "discoverability" mechanisms: means that we can identify which device is connected on this busess
