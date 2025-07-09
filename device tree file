@@ -1003,6 +1003,12 @@ needed for a certain state of the device
 3) the pinctrl-names property allows to give a name to each state
 4) when a device is probed,its "default" pinctrl state is requested automatically.
 
+pintctrl-names = "default";
+pintctrl-0 = <pins numbers>
+
+
+
+
 
 1) Some hardware busses provide "discoverability" mechanisms: means that we can identify which device is connected on this busess
 EX: PC(e),USB
