@@ -989,6 +989,13 @@ property name, which property decided to delete
 
 
 
+/*****************************************************************/
+interrupt-controller : is a boolean property that indicates that the node is an interrupt controller.
+#interrupt-cells:indicates the number of cell in the interrupts property for the
+interrupt managed by the selected interrupt controller.
+interrupt-parent: is a phandle that points to the interrupt controller for the
+current node.there is generally a top-level interrupt-parent definition for the main
+interrupt controller.
 
 
 
