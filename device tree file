@@ -997,6 +997,59 @@ interrupt-parent: is a phandle that points to the interrupt controller for the
 current node.there is generally a top-level interrupt-parent definition for the main
 interrupt controller.
 
+
+/{
+	intrl: interrupt-controller@002001{
+		compatible = "arm,cotex-a7-gic";
+		#interrupt-cells = <3>;
+		interrupt-controller;
+		reg = <0x002001 0x1000>,
+		      <0x0022001 0x2000>;
+	};
+	soc {
+	    interrupt-parent= <&intrl>;
+	    spi2:spi@0021001{
+		interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
+
+	    };
+
+	   ipcc:mailbox@0023001{
+
+		interrupts-extended = <&intrl GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>.
+				      <&intrl GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>,
+				     <&ktxt 61 1>;
+	    };
+
+
+	};
+};
+
+Nodes describing interrupt controllers: device like any other, interrupt-controller boolean
+Device using interrupt: interrupts + interrupt-parent, interrupt specifies the interrupt
+number and flags.
+interrupt-parent the interrupt controller,searched recursively in the parent nodes.
+interrupts-extended specifies the interrupt controller,interrupt number and flags
+
+interrupt -name properties:
+some properties are associated to a corresponding <prop>-names property
+gives some human-readable names to entries of the corresponding <prop> properties
+
+interrupt = <0 59 0>,<0 70 0>
+interrupt -names = "macirq","macpmt";
+clocks = <&car 39>,<&car 45>,<&car 86>;
+clock-names -names = "gnssm_rgmii","gnssm_gmac","rgmii;
+
+such names can be typically be used by the driver
+ platform-get_irq_byname(pdev,"macirq");
+
+
+
+
+
+
+
+
+
 1)pinctrl: subsystem allows to manage pin muxing
 2)the pinctrl-<n> properties allow to give the list of pinctrl configuration
 needed for a certain state of the device
@@ -1005,6 +1058,11 @@ needed for a certain state of the device
 
 pintctrl-names = "default";
 pintctrl-0 = <pins numbers>
+
+
+
+
+
 
 
 
