@@ -58,6 +58,10 @@ int main()
   }
 }
 
+
+K_NO_WAIT: means to start the thread immediately. the corresponding parameter to K_THREAD_DEFINE is a
+duration in integral milliseconds, so the equivalent to argument is 0.
+
 statically create task : 
 
 #define MY_STACK_SIZE 500
@@ -65,7 +69,23 @@ statically create task :
 
 extern void my_entry_point(void *,void *,void*);
 
-K_THREAD_STACK_DEFINE(
+K_THREAD_STACK_DEFINE(my_stack_area,MY_STACK_SIZE);
+struct k_thread my_thread_data;
+
+
+k_tid_t my_tid = k_thread_create(&my_thread_data, my_stack_area,K_THREAD_STACK_SIZEOF(my_stack_area),
+                                  my_entry_point, NULL,NULL,NULL,MY_PRIORITY,0,K_NO_WAIT);
+
+
+dynamically allocates a thread stack
+
+#define MY_STACK_SIZE 500
+#deifine MY_PRIORITY 5
+
+extern void my_entry_point(void *,void *,void*);
+
+K_THREAD_STACK_DEFINE(my_stack_area,MY_STACK_SIZE);
+struct k_thread my_thread_data;
 
 
 
