@@ -1,0 +1,76 @@
+k_sleep() : use for delay 
+k_wakeup() : A sleep thread can be woken up prematurely  by another thread using 
+k_busy_wait() : uses for current theread still not yet completed within time period.
+we are telling the CPU don't do context switch perform.
+
+A busy wait is typically used instead of thread sleeping when required delay is too short to
+warrant having the scheduler context switch from the current thread to another thread and 
+then back again.
+
+k_sched_lock() : when currect thread performing  critical operation and we does not 
+wish to be preempted another theread, we are telling scheduler to temporarily treat it as
+cooperative theread.
+
+Once the critical operation is complete the preemptible thread must call "k_sched_unlock()".
+
+k_cpu_idle() : making the cpu idle is simple.the cpu stop executing insteructions unitl an even occurs
+
+ex:   static k_sem my_sem;
+
+void my_isr(void *unused)
+{
+  k_sem_give(&my_sem);
+}
+
+int main()
+{
+  k_sem_init(&my_sem,0,1);
+  for(;;){
+    if(k_sem_take(&my_sem,K_NO_WAIT) == 0) {
+    }
+    k_cpu_idle();
+  }
+}
+
+k_cpu_atomic_idle(): above example have race conition, the interrupt could occur b/w the 
+time the semaphore is taken, finding out it is not available and making the CPU idle again.
+this can cause the CPU to idle unitl another interrupt occurs, which might be never, thus hanging
+the system completely.To prevent this, k_cpu_atomic_idle() use.
+
+ex:   static k_sem my_sem;
+
+void my_isr(void *unused)
+{
+  k_sem_give(&my_sem);
+}
+
+int main()
+{
+  k_sem_init(&my_sem,0,1);
+  for(;;){
+
+     unsigned int key = irq_lock();
+    if(k_sem_take(&my_sem,K_NO_WAIT) == 0) {
+          irq_unlock(key);
+    }
+    else {
+    k_cpu_atomic_idle(key);
+  }
+}
+
+statically create task : 
+
+#define MY_STACK_SIZE 500
+#deifine MY_PRIORITY 5
+
+extern void my_entry_point(void *,void *,void*);
+
+K_THREAD_STACK_DEFINE(
+
+
+
+
+
+
+
+
