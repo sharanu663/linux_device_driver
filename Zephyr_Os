@@ -120,6 +120,132 @@ It’s always important to remember that time slicing only affect threads with t
 
 
 
+
+
+Workqueue: A workqueue in Zephyr is essentially a dedicated thread with additional features. 
+It's designed to execute functions (work items) that have been submitted to it in a first-in, first-out (FIFO) manner
+
+Workqueues are particularly useful for handling tasks that are triggered by interrupts 
+but require more processing time than an ISR can afford to spend.
+By submitting the task to a workqueue, the ISR can quickly return, and the workqueue 
+thread will handle the actual processing later. 
+
+ex: we created two thread, thread0 has high priority, observ the both thread doing same work 
+and emulate_work() is inline function.the execution of thread0 it will take 23 msec but thread1
+it will taking execution time double becuase of preempted by the thread0.we can avoid the thread0
+is processing non-urgent work using "workqueue".
+
+
+
+
+#define THREAD0_PRIORITY 2 
+#define THREAD1_PRIORITY 3
+#define WORKQ_PRIORITY   4
+
+
+void thread0(void)
+{
+    uint64_t time_stamp;
+    int64_t delta_time;
+
+    while (1) {
+        time_stamp = k_uptime_get();
+        emulate_work();
+        delta_time = k_uptime_delta(&time_stamp);
+
+        printk("thread0 yielding this round in %lld ms\n", delta_time);
+        k_msleep(20);
+    }   
+}
+
+void thread1(void)
+{
+    uint64_t time_stamp;
+    int64_t delta_time;
+
+    while (1) {
+        time_stamp = k_uptime_get();
+        emulate_work();
+        delta_time = k_uptime_delta(&time_stamp);
+
+        printk("thread1 yielding this round in %lld ms\n", delta_time);
+        k_msleep(20);
+    }   
+}
+
+static inline void emulate_work()
+ 
+{
+	for(volatile int count_out = 0; count_out < 300000; count_out ++);
+}
+
+Output:
+*** Booting nRF Connect SDK ***
+*** Using Zephyr OS ***
+thread0 yielding this round in 23 ms
+thread0 yielding this round in 24 ms
+thread1 yielding this round in 50 ms
+thread0 yielding this round in 23 ms
+thread0 yielding this round in 23 ms
+thread1 yielding this round in 50 ms
+
+
+after modified the above code:
+Offloading work from high priority task of thread0
+
+Since thread0 is processing non-urgent work,
+it is not good practice to block other threads just to perform this work. 
+Let’s offload the non-urgent emulate_work() into a lower priority workqueue thread.
+
+We need to associate our work (emulate_work()) as a work item and push it to a specific workqueue. 
+This is done by creating a work_info structure and a function, 
+offload_function() that should only run emulate_work().
+
+struct work_info {
+    struct k_work work;
+    char name[25];
+} my_work;
+
+void offload_function(struct k_work *work_term)
+{
+	emulate_work();
+}
+
+In the entry function for thread0, start the workqueue using k_work_queue_start(). 
+Then initialize the work item using k_work_init() to connect the work item to its handler offload_function().
+k_work_queue_start(&offload_work_q, my_stack_area,
+                   K_THREAD_STACK_SIZEOF(my_stack_area), WORKQ_PRIORITY,
+                   NULL);
+
+strcpy(my_work.name, "Thread0 emulate_work()");
+k_work_init(&my_work.work, offload_function);
+
+Instead of running emulate_work in the while-loop, 
+submit a work item to the workqueue using k_work_submit_to_queue()
+
+k_work_submit_to_queue(&offload_work_q, &my_work.work);
+
+OUTPUT:
+*** Booting nRF Connect SDK ***
+*** Using Zephyr OS ***
+thread0 yielding this round in 0 ms
+thread0 yielding this round in 0 ms
+thread1 yielding this round in 26 ms
+thread0 yielding this round in 0 ms
+thread0 yielding this round in 0 ms
+thread1 yielding this round in 26 ms
+thread0 yielding this round in 0 ms
+thread0 yielding this round in 0 ms
+
+
+
+
+
+
+
+
+
+
 k_sleep() : use for delay 
 k_wakeup() : A sleep thread can be woken up prematurely  by another thread using 
 k_busy_wait() : uses for current theread still not yet completed within time period.
