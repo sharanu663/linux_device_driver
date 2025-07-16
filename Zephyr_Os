@@ -1,3 +1,125 @@
+Nordic examples:
+https://github.com/NordicDeveloperAcademy
+
+
+
+
+The scheduler distinguishes between two types of threads based on their priority: cooperative and preemptible.
+A thread with a negative priority is classified as a cooperative thread. Once a cooperative thread becomes the current thread, 
+it will remain so until it performs an action that makes it unready.
+
+On the other hand, a thread with a non-negative priority is classified as a preemptible thread.
+Once a preemptible thread becomes the current thread, 
+it may be replaced at any time if a cooperative thread or a preemptible thread of higher or equal priority becomes ready.
+
+The number of non-negative priorities, which is associated with preemptible threads, 
+is configurable through the Kconfig symbol CONFIG_NUM_PREEMPT_PRIORITIES and is, by default, equal to 15. 
+The main thread has a priority of 0, while the idle thread has a priority of 15 by default.
+
+
+
+
+
+Interrupt Service Routines (ISRs) are generated asynchronously by the device drivers and protocol stacks.
+They are not scheduled. This includes callback functions, which are the application extension of ISRs. 
+It is important to remember that ISRs preempt the execution of the current thread, allowing the response to occur with very low overhead. 
+Thread execution resumes only once all ISR work has been completed. Therefore, it is important to make sure that ISRs, including callback functions, 
+do not contain time-consuming work or involve blocking functionalities, as they will starve all other threads
+
+
+
+There are two ways to create a thread in Zephyr, the first one is dynamically (at run-time) through : k_thread_create()
+
+
+
+which is more frequently used, is statically (at compile time) by using the : K_THREAD_DEFINE() macro. 
+This is the macro for defining and initializing a thread and plugging its data structures into the RTOS kernel,
+
+
+#define STACKSIZE 1024
+#define THREAD0_PRIORITY 7
+#define THREAD1_PRIORITY 7
+
+extern const k_tid_t thread0_id;
+extern const k_tid_t thread1_id;
+extern void my_entry_point(void *,void *,void*);
+
+extern void my_entry_point(void *,void *,void*){
+      printk("Hello, I am thread0\n");
+}
+
+
+extern void my_entry_point_two(void *,void *,void*){
+      printk("Hello, I am thread1\n");
+}
+
+K_THREAD_DEFINE(thread0_id, STACKSIZE, thread0, NULL, NULL, NULL,
+		THREAD0_PRIORITY, 0, 0);
+K_THREAD_DEFINE(thread1_id, STACKSIZE, thread1, NULL, NULL, NULL,
+		THREAD1_PRIORITY, 0, 0);
+
+parameters :
+
+name: The name of the thread.
+
+stack_size: Size of the stack in bytes.
+
+entry: The function the thread will execute (thread entry point).
+
+p1, p2, p3: Optional parameters passed to the entry function.
+
+prio: Thread priority (lower values are higher priority).
+
+options: Thread options (e.g., K_ESSENTIAL, K_FP_REGS, etc.), can be combined using |.
+
+delay: Delay (in milliseconds) before the thread starts running. 0 means immediate start.
+
+
+
+If Two thread as same priority and there is no k_sleep() or k_msleep() function on both threads,What will happen
+thread1 will not get chance to execute. In this situtaion either use sleep() function or 
+k_yield().
+
+Lets usage of k_yield() : thread0 and thread1 voluntarily yield using. it means 
+causes the current thread to give away execution (yield) to another thread of the same or higher priority.
+ 
+extern void my_entry_point(void *,void *,void*){
+      printk("Hello, I am thread0\n");
+      k_yield();
+}
+
+
+extern void my_entry_point_two(void *,void *,void*){
+      printk("Hello, I am thread1\n");
+      k_yield();
+}
+
+
+The disadvantage of this is that yielding this often and thereby invoking the scheduler also takes up CPU time. 
+The scheduler uses CPU time to do the book-keeping of the kernel resources every time k_yield() is called which in turn costs power. 
+A system with good architecture entails designing your threads so the scheduler uses a minimal amount of CPU time,
+i.e designing threads that have correct priorities and are reasonably considerate (yielding/sleeping/waiting) to other threads.
+
+
+
+To enable the time slicing : we to mention MACRO in prj.conf file.
+CONFIG_TIMESLICING=y
+CONFIG_TIMESLICE_SIZE=10
+CONFIG_TIMESLICE_PRIORITY=0
+
+TIMESLICING : enables the time slicing feature.
+
+TIMESLICE_SIZE : is the maximum time (in ms) that the current running thread has before 
+it is forcefully preempted by the scheduler to allow the other equal priority threads to run.
+
+TIMESLICE_PRIORITY : is the priority threshold for time slicing,meaning threads with higher priority 
+than this threshold are not subject to time slicing. 
+We set this value to 0. This means priorities (0 to 15) will be affected by time-slicing only 
+when two or more threads exist in one level. 
+It’s always important to remember that time slicing only affect threads with the same priority level.
+
+
+
 k_sleep() : use for delay 
 k_wakeup() : A sleep thread can be woken up prematurely  by another thread using 
 k_busy_wait() : uses for current theread still not yet completed within time period.
@@ -100,6 +222,11 @@ my_tid = k_thread_create(&my_thread_data, my_stack_area,CONFIG_DYNAMIC_THREAD_ST
                                   my_entry_point, NULL,NULL,NULL,MY_PRIORITY,0,K_NO_WAIT);
 k_thread_join(my_tid,K_FOREVER);
 k_thread_stack_free(my_stack_area);
+
+
+
+
+
 
 
 
