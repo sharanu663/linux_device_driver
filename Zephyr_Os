@@ -335,6 +335,19 @@ K_THREAD_DEFINE(my_tid,MY_STACK_SIZE,my_entry_point,NULL,NULL,NULL,,MY_PRIORITY,
 
 
 
+
+
+When CONFIG_DYNAMIC_THREAD_ALLOC=y and CONFIG_DYNAMIC_THREAD_POOL_SIZE > 0, the k_thread_stack_alloc() function will typically first try to allocate a stack from the pre-allocated pool. 
+If the pool is full or cannot satisfy the request, it will then attempt to allocate from the system heap (if CONFIG_DYNAMIC_THREAD_ALLOC is enabled), 
+as specified by CONFIG_DYNAMIC_THREAD_PREFER_POOL or CONFIG_DYNAMIC_THREAD_PREFER_ALLOC
+
+In prj.cof :
+CONFIG_DYNAMIC_THREAD=y
+CONFIG_DYNAMIC_THREAD_POOL_SIZE=1
+
+
+
+
 dynamically allocates a thread stack:
 
 #define MY_STACK_SIZE 500
