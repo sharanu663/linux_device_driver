@@ -953,7 +953,7 @@ ex:
       status = "okay";
    };
    
-   pinctrl1{
+   pinctrl {
    	custom_pins:custom_pins_spi{   // create you own child node and copy exitence default pin defined formate and make pin change number on overlay file
    	
    		group1{
